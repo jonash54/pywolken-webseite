@@ -1,0 +1,337 @@
+:root {
+    --bg: #faf9f7;
+    --bg-secondary: #f0eee9;
+    --text: #2c2c2c;
+    --text-secondary: #8a8578;
+    --accent: #4a7a3f;
+    --accent-hover: #5a8f4e;
+    --border: #d8d4cc;
+    --error: #c45c4a;
+    --success: #4a7a3f;
+    --warm-glow: #c4a24e;
+    --radius: 16px;
+    --font: "Georgia", "Times New Roman", serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #1a1b17;
+        --bg-secondary: #242421;
+        --text: #e0ded8;
+        --text-secondary: #8a8578;
+        --accent: #8fa37a;
+        --accent-hover: #a0b48c;
+        --border: #3a3a36;
+        --error: #d4756a;
+        --success: #8fa37a;
+        --warm-glow: #c4a24e;
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 4rem 1.5rem 3rem;
+}
+
+.container {
+    width: 100%;
+    max-width: 480px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+h1 {
+    font-size: 1.75rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: lowercase;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.lang-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+}
+
+.lang-toggle:hover {
+    color: var(--text);
+}
+
+.privacy-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+    transition: color 0.3s, opacity 0.3s;
+}
+
+.privacy-link:hover {
+    color: var(--text);
+    opacity: 1;
+}
+
+/* Upload zone */
+.upload-zone {
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.4s ease, background 0.4s ease;
+    margin-bottom: 2rem;
+}
+
+.upload-zone:hover,
+.upload-zone.drag-over {
+    border-color: var(--accent);
+    background: var(--bg-secondary);
+}
+
+.upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+
+.upload-icon {
+    color: var(--text-secondary);
+    transition: color 0.3s;
+    opacity: 0.7;
+}
+
+.upload-zone:hover .upload-icon {
+    color: var(--accent);
+    opacity: 1;
+}
+
+.hint {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+}
+
+#file-input {
+    display: none;
+}
+
+.file-name {
+    margin-top: 0.75rem;
+    font-weight: 400;
+    color: var(--accent);
+    word-break: break-all;
+    font-size: 0.9rem;
+}
+
+/* Form controls */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.03em;
+}
+
+select,
+input[type="number"] {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.95rem;
+    transition: border-color 0.3s;
+    appearance: auto;
+}
+
+select:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+    margin-top: 0.25rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.03em;
+}
+
+.checkbox-label input {
+    accent-color: var(--accent);
+    width: 1rem;
+    height: 1rem;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 0.8rem;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 0.3s ease, opacity 0.3s ease;
+    margin-top: 1rem;
+}
+
+button[type="submit"]:hover {
+    background: var(--accent-hover);
+}
+
+button[type="submit"]:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Status */
+.status-text {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.progress-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.75rem;
+}
+
+#progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+/* Results */
+#results {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+#download-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+#download-links a {
+    display: block;
+    padding: 0.75rem;
+    background: transparent;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1.5px solid var(--accent);
+    border-radius: 8px;
+    letter-spacing: 0.05em;
+    font-size: 0.9rem;
+    transition: background 0.3s, color 0.3s;
+}
+
+#download-links a:hover {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+/* Error */
+.error-box {
+    background: transparent;
+    color: var(--error);
+    border: 1.5px solid var(--error);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 1.5rem;
+}
+
+.hidden {
+    display: none;
+}
+
+#hillshade-options:not(.hidden) {
+    padding: 0.5rem 0;
+}
+
+/* Divider */
+#hillshade-toggle-group {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+footer {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.donate-btn {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+}
+
+.donate-btn:hover {
+    color: var(--text);
+}

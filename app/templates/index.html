@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ t.title }} – {{ t.subtitle }}</title>
+    <link rel="stylesheet" href="/static/style.css?v=7">
+</head>
+<body data-translations='{{ t | tojson }}'>
+    <div class="container">
+        <header>
+            <h1>{{ t.title }}</h1>
+            <p class="subtitle">{{ t.subtitle }}</p>
+            <a href="?lang={{ 'de' if lang == 'en' else 'en' }}" class="lang-toggle">{{ t.lang_toggle }}</a>
+            <!-- Uncomment and set your privacy policy URL -->
+            <!-- <a href="https://example.com/privacy" target="_blank" rel="noopener" class="privacy-link">{{ t.privacy }}</a> -->
+        </header>
+
+        <form id="upload-form" enctype="multipart/form-data">
+            <input type="hidden" name="lang" value="{{ lang }}">
+
+            <!-- File upload -->
+            <div class="upload-zone" id="drop-zone">
+                <label for="file-input" class="upload-label">
+                        <svg class="upload-icon" viewBox="0 0 64 52" width="64" height="52" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+				<g transform="translate(64,0) scale(-1,1)">
+                        		<!-- terrain ridges -->
+                        		<path d="M2 42 C14 39 26 36 32 37 C38 38 50 35 62 32" stroke-width="1.2" opacity="0.22"/>
+                        		<path d="M2 48 C14 46 26 44 32 45 C38 46 50 43 62 41" stroke-width="1.2" opacity="0.12"/>
+                        		<!-- airplane (side view, flying right) -->
+                        		<g stroke-width="0.9" opacity="0.65">
+                            			<!-- fuselage fill -->
+                            			<path d="M47 8 L44 6.5 L16 6.5 L16 9.5 L44 9.5 L47 8Z" fill="currentColor" stroke-width="0" style="fill-opacity:0.07"/>
+                            			<!-- nose cone -->
+                            			<path d="M47 8 L44 6.5"/>
+                            			<path d="M47 8 L44 9.5"/>
+                            			<!-- fuselage top (split to hide behind upper wing) -->
+                            			<path d="M44 6.5 L36 6.5"/>
+                            			<path d="M31 6.5 L16 6.5"/>
+                            			<path d="M44 9.5 L16 9.5"/>
+                            			<!-- tail (straight) -->
+                            			<path d="M16 6.5 L16 9.5"/>
+                            			<!-- upper wing (fully visible, overlaps fuselage) -->
+                            			<path d="M38 8 L28 1 L23 1 L33 8Z" fill="var(--bg)" stroke-width="0"/>
+                            			<path d="M38 8 L28 1 L23 1 L33 8Z" fill="currentColor" stroke-width="0" style="fill-opacity:0.06"/>
+                            			<path d="M38 8 L28 1"/>
+                            			<path d="M28 1 L23 1" stroke-width="0.8"/>
+                            			<path d="M23 1 L33 8" stroke-width="0.7" opacity="0.4"/>
+                            			<!-- main wing (sweeping down-back) -->
+                            			<path d="M36 9.5 L28 14 L24 14 L32 9.5" fill="currentColor" stroke-width="0" style="fill-opacity:0.06"/>
+                            			<path d="M36 9.5 L28 14"/>
+                            			<path d="M28 14 L24 14" stroke-width="0.8"/>
+                            			<path d="M24 14 L32 9.5" stroke-width="0.7" opacity="0.4"/>
+                            			<!-- tail fin (vertical, up) -->
+                            			<path d="M19 6.5 L16 2.5"/>
+                            			<path d="M16 2.5 L15 3" stroke-width="0.8"/>
+                            			<path d="M15 3 L17 6.5" stroke-width="0.6" opacity="0.35"/>
+                        		</g>
+                        		<!-- LiDAR pulses: ↓ down -->
+                        		<path d="M24 16 L24 33" stroke-width="0.7" stroke-dasharray="1.8 2.2" opacity="0.3"/>
+                        		<path d="M23 31.5 L24 34 L25 31.5" stroke-width="0.7" opacity="0.35"/>
+                        		<!-- LiDAR pulses: ↑ up -->
+                        		<path d="M30 34 L30 17" stroke-width="0.7" stroke-dasharray="1.8 2.2" opacity="0.3"/>
+                        		<path d="M29 19.5 L30 17 L31 19.5" stroke-width="0.7" opacity="0.35"/>
+                        		<!-- LiDAR pulses: ↓ down -->
+                        		<path d="M36 16 L36 33" stroke-width="0.7" stroke-dasharray="1.8 2.2" opacity="0.3"/>
+                        		<path d="M35 31.5 L36 34 L37 31.5" stroke-width="0.7" opacity="0.35"/>
+                        		<!-- LiDAR pulses: ↑ up -->
+                        		<path d="M42 34 L42 17" stroke-width="0.7" stroke-dasharray="1.8 2.2" opacity="0.3"/>
+                        		<path d="M41 19.5 L42 17 L43 19.5" stroke-width="0.7" opacity="0.35"/>
+                      		</g>
+                    </svg>
+                    <span>{{ t.upload_label }}</span>
+                    <span class="hint">{{ t.drag_drop }}</span>
+                    <span class="hint">{{ t.max_size }}</span>
+                </label>
+                <input type="file" id="file-input" name="file" accept=".laz,.las,.tif,.tiff,application/octet-stream" required>
+                <div id="file-name" class="file-name"></div>
+            </div>
+
+            <!-- LAZ-specific options (hidden for TIF uploads) -->
+            <div id="laz-options">
+                <div class="form-group">
+                    <label for="model-type">{{ t.model_type }}</label>
+                    <select id="model-type" name="model_type">
+                        <option value="dsm">{{ t.dsm }}</option>
+                        <option value="dem">{{ t.dem }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="resolution">{{ t.resolution }}</label>
+                    <input type="number" id="resolution" name="resolution" value="1.0" min="0.1" max="10" step="0.1">
+                </div>
+            </div>
+
+            <!-- Hillshade options -->
+            <div class="form-group" id="hillshade-toggle-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="enable-hillshade" name="enable_hillshade" value="true">
+                    <span>{{ t.enable_hillshade }}</span>
+                </label>
+            </div>
+
+            <div id="hillshade-options" class="hidden">
+                <div class="form-group">
+                    <label for="z-factor">{{ t.z_factor }}: <span id="z-factor-val">1.0</span></label>
+                    <input type="range" id="z-factor" name="z_factor" min="0.1" max="10" step="0.1" value="1.0">
+                </div>
+                <div class="form-group">
+                    <label for="azimuth">{{ t.azimuth }}: <span id="azimuth-val">315</span></label>
+                    <input type="range" id="azimuth" name="azimuth" min="0" max="360" step="1" value="315">
+                </div>
+                <div class="form-group">
+                    <label for="altitude">{{ t.altitude }}: <span id="altitude-val">45</span></label>
+                    <input type="range" id="altitude" name="altitude" min="1" max="90" step="1" value="45">
+                </div>
+            </div>
+
+            <button type="submit" id="submit-btn">{{ t.submit }}</button>
+        </form>
+
+        <!-- Status / results -->
+        <div id="status" class="hidden">
+            <div id="status-text" class="status-text"></div>
+            <div id="progress-bar" class="progress-bar"><div id="progress-fill"></div></div>
+        </div>
+
+        <div id="results" class="hidden">
+            <div id="download-links"></div>
+            <p class="hint">{{ t.expires }}</p>
+        </div>
+
+        <div id="error-box" class="hidden error-box"></div>
+
+        {% if t.sponsor and false %}
+        <footer>
+            <a href="#" class="donate-btn">{{ t.sponsor }}</a>
+        </footer>
+        {% endif %}
+    </div>
+
+    <script src="/static/app.js?v=7"></script>
+</body>
+</html>
