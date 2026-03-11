@@ -2,6 +2,8 @@
 
 A self-hosted web application for converting LAS/LAZ point cloud files to DEM/DSM rasters and generating hillshade visualizations.
 
+![Screenshot](screenshot.png)
+
 ## Features
 
 - **LAS/LAZ to DEM or DSM** – GeoTIFF output using IDW interpolation via PDAL
